@@ -10,25 +10,21 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DeckGUI.h"
+using namespace std;
 
 //==============================================================================
 DeckGUI::DeckGUI(DJAudioPlayer* _player,
                  AudioFormatManager & formatManagerToUse,
-                 AudioThumbnailCache & cacheToUse) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse) // call the constructor on wavefor
+                 AudioThumbnailCache & cacheToUse,
+                 Colour color1,
+                 Colour color2,
+                 Colour color3
+                 ) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse) // call the constructor on wavefor
 {
 
-    addAndMakeVisible(playButton);
-    addAndMakeVisible(stopButton);
-    addAndMakeVisible(loadButton);
-       
-    addAndMakeVisible(volSlider);
-    addAndMakeVisible(speedSlider);
-    addAndMakeVisible(posSlider);
-
-
     playButton.addListener(this);
-    stopButton.addListener(this);
     loadButton.addListener(this);
+    pauseButton.addListener(this);
 
     volSlider.addListener(this);
     speedSlider.addListener(this);
@@ -36,11 +32,61 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 
 
     volSlider.setRange(0.0, 1.0);
-    speedSlider.setRange(0.25, 100.0);
+    speedSlider.setRange(0.5, 100.0);
     posSlider.setRange(0.0, 1.0);
+    
+    volSlider.setNumDecimalPlacesToDisplay(2);
+    speedSlider.setNumDecimalPlacesToDisplay(2);
+    posSlider.setNumDecimalPlacesToDisplay(2);
+    
+    
+
+    addAndMakeVisible (volLabel);
+    volLabel.setText ("Volume", juce::dontSendNotification);
+    volLabel.attachToComponent (&volSlider, true); // [4]
+    
+    addAndMakeVisible (speedLabel);
+    speedLabel.setText ("Speed", juce::dontSendNotification);
+    speedLabel.attachToComponent (&speedSlider, true); // [4]
+    
+    addAndMakeVisible (posLabel);
+    posLabel.setText ("Position", juce::dontSendNotification);
+    posLabel.attachToComponent (&posSlider, true); // [4]
+
+    
     addAndMakeVisible(waveformDisplay);
+    waveformDisplay.setColor(color1);
     
     startTimer(200);
+    
+    
+   
+
+    //Image playImage = ImageCache::getFromFile(f);
+    const auto playImage = ImageCache::getFromMemory (BinaryData::play_png, BinaryData::play_pngSize);
+    
+    
+    const auto loadImage = ImageCache::getFromMemory(BinaryData::upload_png, BinaryData::upload_pngSize);
+    
+    const auto pauseImage = ImageCache::getFromMemory(BinaryData::pause_png, BinaryData::pause_pngSize);
+
+    
+    playButton.setImages (true, true, true, playImage, 1.0f, color1, playImage, 1.0f, color2, playImage, 1.0f, color3);
+    
+    pauseButton.setImages (true, true, true, pauseImage, 1.0f, color1, pauseImage, 1.0f, color2, pauseImage, 1.0f, color3);
+    
+    loadButton.setImages (true, true, true, loadImage, 1.0f, color1, loadImage, 1.0f, color2, loadImage, 1.0f, color3);
+    
+
+    addAndMakeVisible(playButton);
+    addAndMakeVisible(pauseButton);
+    addAndMakeVisible(loadButton);
+       
+    addAndMakeVisible(volSlider);
+    addAndMakeVisible(speedSlider);
+    addAndMakeVisible(posSlider);
+
+
 }
 
 DeckGUI::~DeckGUI()
@@ -57,27 +103,25 @@ void DeckGUI::paint (Graphics& g)
        drawing code..
     */
 
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (Colours::black);   // clear the background
 
     g.setColour (Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (Colours::white);
     g.setFont (14.0f);
-    g.drawText ("DeckGUI", getLocalBounds(),
-                Justification::centred, true);   // draw some placeholder text
 }
 
 void DeckGUI::resized()
 {
     double rowH = getHeight() / 8;
-    playButton.setBounds(0, 0, getWidth(), rowH);
-    stopButton.setBounds(0, rowH, getWidth(), rowH);
-    volSlider.setBounds(0, rowH * 2, getWidth(), rowH);
-    speedSlider.setBounds(0, rowH * 3, getWidth(), rowH);
-    posSlider.setBounds(0, rowH * 4, getWidth(), rowH);
-    waveformDisplay.setBounds(0, rowH * 5, getWidth(), rowH * 2);
-    loadButton.setBounds(0, rowH * 7, getWidth(), rowH);
+    playButton.setBounds(0, rowH*0.1, getWidth()/8, rowH*0.8);
+    pauseButton.setBounds(getWidth()/8, rowH*0.1, getWidth()/8, rowH*0.8);
+    loadButton.setBounds((getWidth()/8)*2, rowH*0.1, getWidth()/8, rowH*0.8);
+    volSlider.setBounds(60, rowH, getWidth()-60, rowH);
+    speedSlider.setBounds(60, rowH * 2, getWidth()-60, rowH);
+    posSlider.setBounds(60, rowH * 3, getWidth()-60, rowH);
+    waveformDisplay.setBounds(0, rowH * 4, getWidth(), rowH * 2);
 
 }
 
@@ -88,9 +132,9 @@ void DeckGUI::buttonClicked(Button* button)
         std::cout << "Play button was clicked " << std::endl;
         player->start();
     }
-     if (button == &stopButton)
+     if (button == &pauseButton)
     {
-        std::cout << "Stop button was clicked " << std::endl;
+        std::cout << "Pause button was clicked " << std::endl;
         player->stop();
 
     }

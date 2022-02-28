@@ -30,10 +30,12 @@ public:
     void changeListenerCallback (ChangeBroadcaster *source) override;
     /** set the relative position of the play head*/
     void setPositionRelative(double pos);
+    void setColor(Colour color);
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WaveformDisplay);
     AudioThumbnail audioThumbnail;
     bool fileLoaded;
     double position;
+    Colour waveformColor;
 };

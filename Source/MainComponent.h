@@ -41,9 +41,9 @@ private:
     AudioFormatManager formatManager;
     AudioThumbnailCache thumbCache{100};
     DJAudioPlayer player1{formatManager};
-    DeckGUI deckGUI1{&player1, formatManager, thumbCache};
+    DeckGUI deckGUI1{&player1, formatManager, thumbCache, {Colour(0xFFFF1832)}, {Colour(0xFFB40A14)},  {Colour(0xFFA00508)}};
     DJAudioPlayer player2{formatManager};
-    DeckGUI deckGUI2{&player2, formatManager, thumbCache};
+    DeckGUI deckGUI2{&player2, formatManager, thumbCache, {Colour(0xFF0A14C8)}, {Colour(0xFF0A14AA)}, {Colour(0xFF0A1496)}};
     MixerAudioSource mixerSource;
     PlaylistComponent playlistComponent;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

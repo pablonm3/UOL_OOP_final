@@ -33,12 +33,17 @@ WaveformDisplay::~WaveformDisplay()
 {
 }
 
+void WaveformDisplay::setColor(Colour color)
+{
+    waveformColor = color;
+}
+
 void WaveformDisplay::paint (juce::Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+    g.fillAll (Colours::black);
     g.setColour (Colours::grey);
     g.drawRect (getLocalBounds(), 1);
-    g.setColour (Colours::orange);
+    g.setColour (waveformColor);
     if(fileLoaded)
     {
         DBG("FILE LOADED");

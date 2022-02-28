@@ -26,7 +26,10 @@ class DeckGUI    : public Component,
 public:
     DeckGUI(DJAudioPlayer* player,
     AudioFormatManager & formatManagerToUse,
-    AudioThumbnailCache & cacheToUse );
+    AudioThumbnailCache & cacheToUse,
+    Colour color1,
+    Colour color2,
+    Colour color3);
     ~DeckGUI();
 
     void paint (Graphics&) override;
@@ -46,13 +49,17 @@ public:
 
 private:
 
-    TextButton playButton{"PLAY"};
-    TextButton stopButton{"STOP"};
-    TextButton loadButton{"LOAD"};
+    ImageButton playButton;
+    ImageButton pauseButton;
+    ImageButton loadButton;
   
     Slider volSlider; 
     Slider speedSlider;
     Slider posSlider;
+    
+    juce::Label volLabel;
+    juce::Label posLabel;
+    juce::Label speedLabel;
 
     DJAudioPlayer* player;
     WaveformDisplay waveformDisplay;
