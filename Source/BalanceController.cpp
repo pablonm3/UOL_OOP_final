@@ -20,10 +20,13 @@ player2(p2)
     // initialise any special settings that your component needs.
   
 
-    slider.setRange(-1.0, 1.0, 0.05);
+    slider.setRange(-1.0, 1.0);
     slider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    slider.setLookAndFeel (&lookAndFeel);
     addAndMakeVisible(slider);
     slider.addListener(this);
+    
+
 
 }
 

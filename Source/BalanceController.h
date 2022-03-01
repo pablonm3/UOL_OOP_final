@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
+#include "LookAndFeelSlider.h"
 
 //==============================================================================
 /*
@@ -30,6 +31,7 @@ public:
     void sliderValueChanged (Slider *slider) override;
 
 private:
+    LookAndFeelSlider lookAndFeel;
     Slider slider;
     DJAudioPlayer* player1;
     DJAudioPlayer* player2;
