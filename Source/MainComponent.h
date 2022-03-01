@@ -11,6 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DJAudioPlayer.h"
 #include "DeckGUI.h"
+#include "BalanceController.h"
 #include "PlaylistComponent.h"
 
 
@@ -47,4 +48,6 @@ private:
     MixerAudioSource mixerSource;
     PlaylistComponent playlistComponent;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
+    
+    BalanceController balanceController;
 };
