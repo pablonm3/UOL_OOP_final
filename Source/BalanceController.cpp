@@ -12,16 +12,18 @@
 #include "BalanceController.h"
 
 //==============================================================================
-BalanceController::BalanceController()
+BalanceController::BalanceController(DJAudioPlayer* p1, DJAudioPlayer* p2)
+: player1(p1),
+player2(p2)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
+  
+
+    slider.setRange(-1.0, 1.0, 0.05);
+    slider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(slider);
     slider.addListener(this);
-
-    slider.setRange(-1.0, 1.0);
-    slider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-
 
 }
 
@@ -31,7 +33,19 @@ BalanceController::~BalanceController()
 
 void BalanceController::sliderValueChanged (Slider *slider)
 {
-  
+    double balance = slider->getValue();
+    double p1_gain = 1;
+    double p2_gain = 1;
+    DBG("BALANCE: " + std::to_string(balance));
+    
+    if(balance > 0){
+        p1_gain = 1- balance;
+    }
+    else if(balance < 0){
+        p2_gain = 1 - (balance * -1);
+    }
+    player1->setGain(p1_gain);
+    player2->setGain(p2_gain);
     
 }
 

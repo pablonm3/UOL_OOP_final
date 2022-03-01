@@ -46,17 +46,12 @@ void WaveformDisplay::paint (juce::Graphics& g)
     g.setColour (waveformColor);
     if(fileLoaded)
     {
-        DBG("FILE LOADED");
         audioThumbnail.drawChannel(g, getLocalBounds(), 0, audioThumbnail.getTotalLength(), 0, 1);
-        DBG("DREW CHANNEL");
         g.setColour(Colours::lightgreen);
-        DBG("position: " + std::to_string(position));
         g.drawRect(position * getWidth(), 0, getWidth() / 20, getHeight());
-        DBG("3");
     }
     else
     {
-        DBG("4");
         g.setFont (20.0f);
         g.drawText ("File not loaded...", getLocalBounds(), Justification::centred, true); // draw some placeholder text
     }
@@ -79,7 +74,6 @@ void WaveformDisplay::setPositionRelative(double pos)
 {
     if (pos != position)
     {
-        DBG("setting position to: "+ std::to_string(pos));
         position = pos;
         repaint();
     }

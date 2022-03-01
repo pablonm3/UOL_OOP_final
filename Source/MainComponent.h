@@ -49,5 +49,5 @@ private:
     PlaylistComponent playlistComponent;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
     
-    BalanceController balanceController;
+    BalanceController balanceController{&player1, &player2};
 };

@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DJAudioPlayer.h"
 
 //==============================================================================
 /*
@@ -19,7 +20,7 @@ class BalanceController  : public juce::Component,
 public Slider::Listener
 {
 public:
-    BalanceController();
+    BalanceController(DJAudioPlayer* p1, DJAudioPlayer* p2);
     ~BalanceController() override;
 
     void paint (juce::Graphics&) override;
@@ -30,5 +31,7 @@ public:
 
 private:
     Slider slider;
+    DJAudioPlayer* player1;
+    DJAudioPlayer* player2;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BalanceController)
 };
