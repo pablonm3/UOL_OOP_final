@@ -12,7 +12,8 @@
 #include "LookAndFeelSlider.h"
 
 //==============================================================================
-LookAndFeelSlider::LookAndFeelSlider()
+LookAndFeelSlider::LookAndFeelSlider(bool _isSmall)
+: isSmall(_isSmall)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -23,23 +24,42 @@ LookAndFeelSlider::~LookAndFeelSlider()
 {
 }
 
-void LookAndFeelSlider::drawRoundThumb (Graphics& g, float x, float y, float diameter, Colour colour, float outlineThickness)
+void LookAndFeelSlider::drawRoundThumb (Graphics& g, float x, float y, float diameter, Colour colour, float outlineThickness, bool isVertical)
     {
         auto halfThickness = outlineThickness * 0.5f;
         double thumb_height = (diameter - outlineThickness) * 1.5;
         double thumb_width = (diameter - outlineThickness) * 0.8;
+        if(isSmall){
+            thumb_height = thumb_height * 0.8;
+            thumb_width = thumb_width * 0.8;
+        }
         Path p;
         Path p_line;
-
-        p.addRectangle (x,
-                        y-thumb_height/5,
+        if(isVertical == true){
+            double aux = thumb_height;
+            thumb_height = thumb_width;
+            thumb_width = aux;
+            p.addRectangle (x+thumb_width-thumb_width/2,
+                            y-thumb_height/5,
+                            thumb_width,
+                            thumb_height);
+        
+            p_line.addRectangle (x-thumb_width/6,
+                        y-thumb_height/4,
                         thumb_width,
+                        2);
+        }
+        else{
+            p.addRectangle (x,
+                            y-thumb_height/6,
+                            thumb_width,
+                            thumb_height);
+        
+            p_line.addRectangle (x+(thumb_width/2) -1,
+                        y-thumb_height/6,
+                        2,
                         thumb_height);
-    
-        p_line.addRectangle (x+(thumb_width/2) -1,
-                    y-thumb_height/5,
-                    2,
-                    thumb_height);
+        }
        // const auto thumbImage = ImageCache::getFromMemory(BinaryData::thumb_png, BinaryData::thumb_pngSize);
        // g.drawImageAt(thumbImage, x + halfThickness,
          //                       y + halfThickness,
@@ -95,12 +115,14 @@ Slider& slider
                }
 
                auto outlineThickness = slider.isEnabled() ? 0.8f : 0.3f;
+              
                drawRoundThumb (g,
                                kx - sliderRadius,
                                ky - sliderRadius,
                                sliderRadius * 2.0f,
-                               knobColour, outlineThickness);
-           }
+                               knobColour, outlineThickness,
+                               style == Slider::LinearVertical);
+               }
            else
            {
                // Just call the base class for the demo

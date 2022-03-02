@@ -18,8 +18,10 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
                  AudioThumbnailCache & cacheToUse,
                  Colour color1,
                  Colour color2,
-                 Colour color3
-                 ) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse) // call the constructor on wavefor
+                 Colour color3,
+                 bool _is_left
+                 ) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse),
+                    is_left(_is_left)
 {
 
     playButton.addListener(this);
@@ -41,10 +43,6 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     
     
 
-    addAndMakeVisible (volLabel);
-    volLabel.setText ("Volume", juce::dontSendNotification);
-    volLabel.attachToComponent (&volSlider, true); // [4]
-    
     addAndMakeVisible (speedLabel);
     speedLabel.setText ("Speed", juce::dontSendNotification);
     speedLabel.attachToComponent (&speedSlider, true); // [4]
@@ -85,6 +83,13 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(posSlider);
+    
+    speedSlider.setLookAndFeel (&lookAndFeel);
+    posSlider.setLookAndFeel (&lookAndFeel);
+    volSlider.setLookAndFeel (&lookAndFeel);
+    volSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
+    volSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    
 
 
 }
@@ -115,12 +120,27 @@ void DeckGUI::paint (Graphics& g)
 void DeckGUI::resized()
 {
     double rowH = getHeight() / 8;
-    playButton.setBounds(0, rowH*0.1, getWidth()/8, rowH*0.8);
-    pauseButton.setBounds(getWidth()/8, rowH*0.1, getWidth()/8, rowH*0.8);
-    loadButton.setBounds((getWidth()/8)*2, rowH*0.1, getWidth()/8, rowH*0.8);
-    volSlider.setBounds(60, rowH, getWidth()-60, rowH);
-    speedSlider.setBounds(60, rowH * 2, getWidth()-60, rowH);
-    posSlider.setBounds(60, rowH * 3, getWidth()-60, rowH);
+    double col = getWidth()/8;
+    
+    if(is_left){
+        volSlider.setBounds(getWidth()-col, rowH*0.1, getWidth()/8, rowH * 4 - 10);
+        playButton.setBounds(0, rowH*0.1, getWidth()/8, rowH*0.8);
+        pauseButton.setBounds(col, rowH*0.1, getWidth()/8, rowH*0.8);
+        loadButton.setBounds(col*2, rowH*0.1, getWidth()/8, rowH*0.8);
+        
+        speedSlider.setBounds(col, rowH * 2, getWidth()-col*2, rowH);
+        posSlider.setBounds(col, rowH * 3, getWidth()-col*2, rowH);
+    }
+    else{
+        volSlider.setBounds(0, rowH*0.1, col, rowH * 4 - 10);
+        playButton.setBounds(col, rowH*0.1, getWidth()/8, rowH*0.8);
+        pauseButton.setBounds(col*2, rowH*0.1, getWidth()/8, rowH*0.8);
+        loadButton.setBounds(col*3, rowH*0.1, getWidth()/8, rowH*0.8);
+        speedSlider.setBounds(col*2, rowH * 2, getWidth()-col*2, rowH);
+        posSlider.setBounds(col*2, rowH * 3, getWidth()-col*2, rowH);
+    }
+
+    
     waveformDisplay.setBounds(0, rowH * 4, getWidth(), rowH * 2);
 
 }

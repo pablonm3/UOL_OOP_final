@@ -18,7 +18,7 @@
 class LookAndFeelSlider  : public juce::LookAndFeel_V4
 {
 public:
-    LookAndFeelSlider();
+    LookAndFeelSlider(bool _isSmall=false);
     ~LookAndFeelSlider() override;
     
     void drawLinearSliderThumb(Graphics& g,
@@ -32,7 +32,7 @@ public:
                                 const Slider::SliderStyle style,
                                 Slider& slider) override;
     
-    void drawRoundThumb (Graphics& g, float x, float y, float diameter, Colour colour, float outlineThickness);
+    void drawRoundThumb (Graphics& g, float x, float y, float diameter, Colour colour, float outlineThickness, bool isVertical);
     
     void drawLinearSlider (Graphics& g, int x, int y, int width, int height,
                                float sliderPos, float minSliderPos, float maxSliderPos,
@@ -41,4 +41,5 @@ public:
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LookAndFeelSlider)
+    bool isSmall;
 };

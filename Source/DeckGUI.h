@@ -13,6 +13,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
+#include "LookAndFeelSlider.h"
+
 
 //==============================================================================
 /*
@@ -29,7 +31,8 @@ public:
     AudioThumbnailCache & cacheToUse,
     Colour color1,
     Colour color2,
-    Colour color3);
+    Colour color3,
+    bool _is_left);
     ~DeckGUI();
 
     void paint (Graphics&) override;
@@ -52,17 +55,19 @@ private:
     ImageButton playButton;
     ImageButton pauseButton;
     ImageButton loadButton;
-  
-    Slider volSlider; 
+    
+    LookAndFeelSlider lookAndFeel{true};
+    Slider volSlider;
     Slider speedSlider;
     Slider posSlider;
     
-    juce::Label volLabel;
     juce::Label posLabel;
     juce::Label speedLabel;
 
     DJAudioPlayer* player;
     WaveformDisplay waveformDisplay;
+    
+    bool is_left;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };
