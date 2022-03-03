@@ -39,13 +39,13 @@ void LookAndFeelSlider::drawRoundThumb (Graphics& g, float x, float y, float dia
             double aux = thumb_height;
             thumb_height = thumb_width;
             thumb_width = aux;
-            p.addRectangle (x+thumb_width-thumb_width/2,
-                            y-thumb_height/5,
+            p.addRectangle (x-2,
+                            y+2,
                             thumb_width,
                             thumb_height);
         
-            p_line.addRectangle (x-thumb_width/6,
-                        y-thumb_height/4,
+            p_line.addRectangle (x-2,
+                        y + thumb_height/2 +1,
                         thumb_width,
                         2);
         }

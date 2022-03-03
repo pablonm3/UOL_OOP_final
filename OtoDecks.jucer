@@ -5,10 +5,13 @@
   <MAINGROUP id="mcJZqF" name="OtoDecks">
     <GROUP id="{1B92A96A-C195-18DD-92BC-3274891DD920}" name="resources">
       <FILE id="cSlK35" name="pause.png" compile="0" resource="1" file="images/pause.png"/>
+      <FILE id="fzlFRk" name="fx.png" compile="0" resource="1" file="images/fx.png"/>
       <FILE id="ULKbir" name="upload.png" compile="0" resource="1" file="images/upload.png"/>
       <FILE id="HQYPGR" name="play.png" compile="0" resource="1" file="images/play.png"/>
     </GROUP>
     <GROUP id="{356C603F-01E1-55B2-02A0-F2D89D9A59E6}" name="Source">
+      <FILE id="cRrYrG" name="FileName.cpp" compile="1" resource="0" file="Source/FileName.cpp"/>
+      <FILE id="CZNfIW" name="FileName.h" compile="0" resource="0" file="Source/FileName.h"/>
       <FILE id="QDmu7g" name="LookAndFeelSlider.cpp" compile="1" resource="0"
             file="Source/LookAndFeelSlider.cpp"/>
       <FILE id="Phlqex" name="LookAndFeelSlider.h" compile="0" resource="0"

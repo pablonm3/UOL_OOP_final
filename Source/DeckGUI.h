@@ -14,6 +14,8 @@
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
 #include "LookAndFeelSlider.h"
+#include "Filename.h"
+
 
 
 //==============================================================================
@@ -56,6 +58,14 @@ private:
     ImageButton pauseButton;
     ImageButton loadButton;
     
+    ImageButton fx1Button;
+    
+    ImageButton fx2Button;
+    ImageButton fx3Button;
+    ImageButton fx4Button;
+    ImageButton fx5Button;
+    ImageButton fx6Button;
+    
     LookAndFeelSlider lookAndFeel{true};
     Slider volSlider;
     Slider speedSlider;
@@ -66,6 +76,7 @@ private:
 
     DJAudioPlayer* player;
     WaveformDisplay waveformDisplay;
+    FileName filenameScreen;
     
     bool is_left;
 

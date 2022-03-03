@@ -11,6 +11,9 @@ namespace BinaryData
     extern const char*   pause_png;
     const int            pause_pngSize = 4248;
 
+    extern const char*   fx_png;
+    const int            fx_pngSize = 20257;
+
     extern const char*   upload_png;
     const int            upload_pngSize = 6074;
 
@@ -18,7 +21,7 @@ namespace BinaryData
     const int            play_pngSize = 4747;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 3;
+    const int namedResourceListSize = 4;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
