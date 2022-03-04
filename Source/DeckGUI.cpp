@@ -21,19 +21,13 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
                  Colour color3,
                  bool _is_left
                  ) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse),
-                    is_left(_is_left)
+                    is_left(_is_left),
+                    fxButtons(color1, color2, color3)
 {
 
     playButton.addListener(this);
     loadButton.addListener(this);
     pauseButton.addListener(this);
-    
-    fx1Button.addListener(this);
-    fx2Button.addListener(this);
-    fx3Button.addListener(this);
-    fx4Button.addListener(this);
-    fx5Button.addListener(this);
-    fx6Button.addListener(this);
 
     volSlider.addListener(this);
     speedSlider.addListener(this);
@@ -74,9 +68,6 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     const auto loadImage = ImageCache::getFromMemory(BinaryData::upload_png, BinaryData::upload_pngSize);
     
     const auto pauseImage = ImageCache::getFromMemory(BinaryData::pause_png, BinaryData::pause_pngSize);
-    
-    
-    const auto fxImage = ImageCache::getFromMemory(BinaryData::fx_png, BinaryData::fx_pngSize);
 
     
     playButton.setImages (true, true, true, playImage, 1.0f, color1, playImage, 1.0f, color2, playImage, 1.0f, color3);
@@ -85,28 +76,17 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     
     loadButton.setImages (true, true, true, loadImage, 1.0f, color1, loadImage, 1.0f, color2, loadImage, 1.0f, color3);
     
-    fx1Button.setImages (true, true, true, fxImage, 1.0f, color1, fxImage, 1.0f, color2, fxImage, 1.0f, color3);
-    fx2Button.setImages (true, true, true, fxImage, 1.0f, color1, fxImage, 1.0f, color2, fxImage, 1.0f, color3);
-    fx3Button.setImages (true, true, true, fxImage, 1.0f, color1, fxImage, 1.0f, color2, fxImage, 1.0f, color3);
-    fx4Button.setImages (true, true, true, fxImage, 1.0f, color1, fxImage, 1.0f, color2, fxImage, 1.0f, color3);
-    fx5Button.setImages (true, true, true, fxImage, 1.0f, color1, fxImage, 1.0f, color2, fxImage, 1.0f, color3);
-    fx6Button.setImages (true, true, true, fxImage, 1.0f, color1, fxImage, 1.0f, color2, fxImage, 1.0f, color3);
     
 
     addAndMakeVisible(playButton);
     addAndMakeVisible(pauseButton);
     addAndMakeVisible(loadButton);
     
-    addAndMakeVisible(fx1Button);
-    addAndMakeVisible(fx2Button);
-    addAndMakeVisible(fx3Button);
-    addAndMakeVisible(fx4Button);
-    addAndMakeVisible(fx5Button);
-    addAndMakeVisible(fx6Button);
-
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(posSlider);
+    addAndMakeVisible(fxButtons);
+
     
     speedSlider.setLookAndFeel (&lookAndFeel);
     posSlider.setLookAndFeel (&lookAndFeel);
@@ -144,26 +124,17 @@ void DeckGUI::resized()
 {
     double rowH = getHeight() / 8;
     double col = getWidth()/8;
-    
     if(is_left){
-        volSlider.setBounds(getWidth()-col, rowH*0.1, getWidth()/8, rowH * 5);
+        volSlider.setBounds(getWidth()-col, rowH*0.1, col, rowH * 5);
         playButton.setBounds(0, rowH*0.1, getWidth()/8, rowH*0.8);
         pauseButton.setBounds(col, rowH*0.1, getWidth()/8, rowH*0.8);
         loadButton.setBounds(col*2, rowH*0.1, getWidth()/8, rowH*0.8);
         
-        // start fx buttons
-        fx1Button.setBounds(0, rowH*2, getWidth()/8, rowH*0.8);
-        fx2Button.setBounds(col, rowH*2, getWidth()/8, rowH*0.8);
-        fx3Button.setBounds(col*2, rowH*2, getWidth()/8, rowH*0.8);
-        fx4Button.setBounds(col*3, rowH*2, getWidth()/8, rowH*0.8);
-        fx5Button.setBounds(col*4, rowH*2, getWidth()/8, rowH*0.8);
-        fx6Button.setBounds(col*5, rowH*2, getWidth()/8, rowH*0.8);
-        
-        // end fx buttons
-        
-        // fx buttons go here
         
         filenameScreen.setBounds(col*3+10, rowH*0.1, getWidth()/2, rowH*0.8);
+        
+        // start fx buttons
+        fxButtons.setBounds(0, rowH*2, getWidth()-col, rowH*0.8);
         
         // end fx buttons
         
@@ -176,20 +147,14 @@ void DeckGUI::resized()
         pauseButton.setBounds(col*2, rowH*0.1, getWidth()/8, rowH*0.8);
         loadButton.setBounds(col*3, rowH*0.1, getWidth()/8, rowH*0.8);
         
-        // start fx buttons
-        fx1Button.setBounds(col, rowH*2, getWidth()/8, rowH*0.8);
-        fx2Button.setBounds(col*2, rowH*2, getWidth()/8, rowH*0.8);
-        fx3Button.setBounds(col*3, rowH*2, getWidth()/8, rowH*0.8);
-        fx4Button.setBounds(col*4, rowH*2, getWidth()/8, rowH*0.8);
-        fx5Button.setBounds(col*5, rowH*2, getWidth()/8, rowH*0.8);
-        fx6Button.setBounds(col*6, rowH*2, getWidth()/8, rowH*0.8);
-        // end fx buttons
-        
-        // fx buttons go here
-        
+   
         filenameScreen.setBounds(col*4+10, rowH*0.1, getWidth()/2 -20, rowH*0.8);
         
+        // start fx buttons
+        fxButtons.setBounds(col, rowH*2, getWidth()-col, rowH*0.8);
+        
         // end fx buttons
+        
         
         speedSlider.setBounds(col*2, rowH * 3, getWidth()-col*2, rowH);
         posSlider.setBounds(col*2, rowH * 4, getWidth()-col*2, rowH);
@@ -225,12 +190,6 @@ void DeckGUI::buttonClicked(Button* button)
             waveformDisplay.loadURL(url);
         }
     }
-    if (button == &fx1Button)
-   {
-       std::cout << "fx1Button button was clicked " << std::endl;
-
-
-   }
 }
 
 void DeckGUI::sliderValueChanged (Slider *slider)
