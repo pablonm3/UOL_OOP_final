@@ -36,6 +36,21 @@ void DJAudioPlayer::releaseResources()
     resampleSource.releaseResources();
 }
 
+
+
+void DJAudioPlayer::loadFromBinary(const char* data,int size)
+{
+    std::unique_ptr<InputStream> stream = std::make_unique<MemoryInputStream>(data, size, true);
+    auto* reader = formatManager.createReaderFor(std::move(stream));
+    if (reader != nullptr) // good file!
+    {
+        std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader,
+true));
+        transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
+        readerSource.reset (newSource.release());
+    }
+}
+
 void DJAudioPlayer::loadURL(URL audioURL)
 {
     auto* reader = formatManager.createReaderFor(audioURL.createInputStream(false));
@@ -66,7 +81,7 @@ void DJAudioPlayer::setSpeed(double ratio)
     }
     else {
         std::cout << "DJAudioPlayer::setSpeed ratio: " << ratio<< std::endl;
-        resampleSource.setResamplingRatio(ratio/10);
+        resampleSource.setResamplingRatio(ratio);
     }
 }
 void DJAudioPlayer::setPosition(double posInSecs)

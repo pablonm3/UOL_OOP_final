@@ -30,6 +30,7 @@ class DeckGUI    : public Component,
 {
 public:
     DeckGUI(DJAudioPlayer* player,
+            DJAudioPlayer* fxPlayer,
     AudioFormatManager & formatManagerToUse,
     AudioThumbnailCache & cacheToUse,
     Colour color1,
@@ -68,6 +69,7 @@ private:
     juce::Label speedLabel;
 
     DJAudioPlayer* player;
+    DJAudioPlayer* fxPlayer;
     WaveformDisplay waveformDisplay;
     FileName filenameScreen;
     FxButtons fxButtons;

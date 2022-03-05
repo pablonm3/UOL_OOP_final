@@ -21,7 +21,7 @@ class BalanceController  : public juce::Component,
 public Slider::Listener
 {
 public:
-    BalanceController(DJAudioPlayer* p1, DJAudioPlayer* p2);
+    BalanceController(DJAudioPlayer* p1, DJAudioPlayer* fxP1, DJAudioPlayer* p2, DJAudioPlayer* fxP2);
     ~BalanceController() override;
 
     void paint (juce::Graphics&) override;
@@ -35,5 +35,7 @@ private:
     Slider slider;
     DJAudioPlayer* player1;
     DJAudioPlayer* player2;
+    DJAudioPlayer* fxPlayer1;
+    DJAudioPlayer* fxPlayer2;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BalanceController)
 };

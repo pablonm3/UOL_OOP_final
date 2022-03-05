@@ -14,10 +14,12 @@
 //==============================================================================
 FxButtons::FxButtons(Colour color1,
                      Colour color2,
-                     Colour color3)
+                     Colour color3,
+                     DJAudioPlayer* _player)
+: player(_player)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    
+    
     fx1Button.addListener(this);
     fx2Button.addListener(this);
     fx3Button.addListener(this);
@@ -30,7 +32,6 @@ FxButtons::FxButtons(Colour color1,
     addAndMakeVisible(fx4Button);
     addAndMakeVisible(fx5Button);
     addAndMakeVisible(fx6Button);
-
     const auto fxImage = ImageCache::getFromMemory(BinaryData::fx_png, BinaryData::fx_pngSize);
     
     fx1Button.setImages (true, true, true, fxImage, 1.0f, color1, fxImage, 1.0f, color2, fxImage, 1.0f, color3);
@@ -77,7 +78,33 @@ void FxButtons::buttonClicked(Button* button)
 {
     if (button == &fx1Button)
    {
-       std::cout << "fx1Button button was clicked " << std::endl;
+       player->loadFromBinary(BinaryData::fx1_wav, BinaryData::fx1_wavSize);
+       player->start();
+   }
+    if (button == &fx2Button)
+   {
+       player->loadFromBinary(BinaryData::fx2_wav, BinaryData::fx2_wavSize);
+       player->start();
+   }
+    if (button == &fx3Button)
+   {
+       player->loadFromBinary(BinaryData::fx3_wav, BinaryData::fx3_wavSize);
+       player->start();
+   }
+    if (button == &fx4Button)
+   {
+       player->loadFromBinary(BinaryData::fx4_wav, BinaryData::fx4_wavSize);
+       player->start();
+   }
+    if (button == &fx5Button)
+   {
+       player->loadFromBinary(BinaryData::fx5_wav, BinaryData::fx5_wavSize);
+       player->start();
+   }
+    if (button == &fx6Button)
+   {
+       player->loadFromBinary(BinaryData::fx6_wav, BinaryData::fx6_wavSize);
+       player->start();
    }
     
 }

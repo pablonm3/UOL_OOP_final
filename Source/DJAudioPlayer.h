@@ -29,6 +29,7 @@ class DJAudioPlayer : public AudioSource {
     void setPositionRelative(double pos);
     /** get the relative position of the play head */
     double getPositionRelative();
+    void loadFromBinary(const char* data,int size);
     
 
     void start();

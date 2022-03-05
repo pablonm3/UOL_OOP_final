@@ -14,15 +14,16 @@ using namespace std;
 
 //==============================================================================
 DeckGUI::DeckGUI(DJAudioPlayer* _player,
+                 DJAudioPlayer* _fxPlayer,
                  AudioFormatManager & formatManagerToUse,
                  AudioThumbnailCache & cacheToUse,
                  Colour color1,
                  Colour color2,
                  Colour color3,
                  bool _is_left
-                 ) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse),
+                 ) : player(_player), fxPlayer(_fxPlayer), waveformDisplay(formatManagerToUse, cacheToUse),
                     is_left(_is_left),
-                    fxButtons(color1, color2, color3)
+                    fxButtons(color1, color2, color3, _fxPlayer)
 {
 
     playButton.addListener(this);
@@ -35,7 +36,9 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 
 
     volSlider.setRange(0.0, 1.0);
-    speedSlider.setRange(0.5, 100.0);
+    speedSlider.setRange(0.5, 10);
+    speedSlider.setValue(1);
+    volSlider.setValue(1);
     posSlider.setRange(0.0, 1.0);
     
     volSlider.setNumDecimalPlacesToDisplay(2);
@@ -197,6 +200,7 @@ void DeckGUI::sliderValueChanged (Slider *slider)
     if (slider == &volSlider)
     {
         player->setGain(slider->getValue());
+        fxPlayer->setGain(slider->getValue());
     }
 
     if (slider == &speedSlider)

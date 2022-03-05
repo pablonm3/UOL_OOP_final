@@ -12,9 +12,11 @@
 #include "BalanceController.h"
 
 //==============================================================================
-BalanceController::BalanceController(DJAudioPlayer* p1, DJAudioPlayer* p2)
+BalanceController::BalanceController(DJAudioPlayer* p1, DJAudioPlayer* fxP1, DJAudioPlayer* p2, DJAudioPlayer* fxP2)
 : player1(p1),
-player2(p2)
+player2(p2),
+fxPlayer1(fxP1),
+fxPlayer2(fxP2)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -49,6 +51,9 @@ void BalanceController::sliderValueChanged (Slider *slider)
     }
     player1->setGain(p1_gain);
     player2->setGain(p2_gain);
+    fxPlayer1->setGain(p1_gain);
+    fxPlayer2->setGain(p2_gain);
+    
     
 }
 

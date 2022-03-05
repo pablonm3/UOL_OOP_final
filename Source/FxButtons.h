@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DJAudioPlayer.h"
 
 //==============================================================================
 /*
@@ -21,7 +22,8 @@ class FxButtons  : public juce::Component,
 public:
     FxButtons(Colour color1,
               Colour color2,
-              Colour color3);
+              Colour color3,
+              DJAudioPlayer* _player);
     ~FxButtons() override;
 
     void paint (juce::Graphics&) override;
@@ -39,4 +41,5 @@ private:
     ImageButton fx4Button;
     ImageButton fx5Button;
     ImageButton fx6Button;
+    DJAudioPlayer* player;
 };
