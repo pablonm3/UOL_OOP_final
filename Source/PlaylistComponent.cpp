@@ -19,14 +19,14 @@ PlaylistComponent::PlaylistComponent()
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     addAndMakeVisible(tableComponent);
+    addAndMakeVisible(addButton);
     
-    tableComponent.getHeader().addColumn("Track title", 1, 400);
-    tableComponent.getHeader().addColumn("", 2, 200);
+    addButton.addListener(this);
+    
+    tableComponent.getHeader().addColumn("Track title", 1, 250);
+    tableComponent.getHeader().addColumn("Lenght", 2, 150);
+    tableComponent.getHeader().addColumn("Actions", 3, 400);
     tableComponent.setModel(this);
-    trackTitles.push_back("Track 1");
-    trackTitles.push_back("Track 2");
-    trackTitles.push_back("Track 3");
-    trackTitles.push_back("Track 4");
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -35,7 +35,7 @@ PlaylistComponent::~PlaylistComponent()
 
 int PlaylistComponent::getNumRows ()
 {
-    return trackTitles.size();
+    return files.size();
 }
 
 void PlaylistComponent::paintRowBackground (Graphics & g,
@@ -45,13 +45,13 @@ void PlaylistComponent::paintRowBackground (Graphics & g,
     bool rowIsSelected)
 {
     // just highlight selected rows
-    if (rowIsSelected)
-    {
-        g.fillAll(Colours::orange);
-    }
-    else{
-        g.fillAll(Colours::darkgrey);
-    }
+    //if (rowIsSelected)
+   // {
+     //   g.fillAll(Colours::orange);
+    //}
+   // else{
+    g.fillAll(Colours::darkgrey);
+    //}
 }
 
 void PlaylistComponent::paint (juce::Graphics& g)
@@ -78,7 +78,10 @@ void PlaylistComponent::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
+    int tableSize = getHeight() * 0.7;
+    int rowH = 20;
     tableComponent.setBounds(0, 0, getWidth(), getHeight());
+    addButton.setBounds(0, tableSize, getWidth(), rowH);
 }
 
 void PlaylistComponent::paintCell (Graphics & g,
@@ -88,11 +91,23 @@ void PlaylistComponent::paintCell (Graphics & g,
     int height,
     bool rowIsSelected)
 {
-    g.drawText (trackTitles[rowNumber], // the important bit
-                2, 0,
-                width - 4, height,
-                Justification::centredLeft,
-                true);
+    if(columnId ==1){
+        // render filename
+        g.drawText (files[rowNumber].getFileName(), // the important bit
+                    2, 0,
+                    width - 4, height,
+                    Justification::centredLeft,
+                    true);
+    }
+    if(columnId ==2){
+        // render song lenght
+        g.drawText ("3 minutes", // the important bit
+                    2, 0,
+                    width - 4, height,
+                    Justification::centredLeft,
+                    true);
+    }
+ 
 }
 
 void PlaylistComponent::cellClicked (int rowNumber, int columnId, const MouseEvent &)
@@ -100,17 +115,31 @@ void PlaylistComponent::cellClicked (int rowNumber, int columnId, const MouseEve
     DBG("cellClicked rowNumber: " + to_string(rowNumber) + " - columnId: "+ to_string(columnId));
 }
 
+void PlaylistComponent::addSong ()
+{
+    FileChooser chooser{"Select a file..."};
+    if (chooser.browseForFileToOpen()){
+        URL url = URL{chooser.getResult()};
+        files.push_back(url);
+        DBG("files size: "+ to_string(files.size()));
+        tableComponent.updateContent();
+        tableComponent.repaint();
+    }
+}
+
+
+
 Component* PlaylistComponent::refreshComponentForCell (
     int rowNumber,
     int columnId,
     bool isRowSelected,
     Component *existingComponentToUpdate)
 {
-    if (columnId == 2)
+    if (columnId == 3)
     {
         if (existingComponentToUpdate == nullptr)
         {
-            TextButton* btn = new TextButton("play");
+            TextButton* btn = new TextButton("Load deck 1");
             btn->addListener(this);
             String id{std::to_string(rowNumber)};
             btn->setComponentID(id);
@@ -122,6 +151,9 @@ Component* PlaylistComponent::refreshComponentForCell (
 
 void PlaylistComponent::buttonClicked(Button* button)
 {
-    int id = std::stoi(button->getComponentID().toStdString());
-    DBG("PlaylistComponent::buttonClicked " << trackTitles[id]);
+    if (button == &addButton)
+    {
+        std::cout << "Play button was clicked " << std::endl;
+        addSong();
+    }
 }
