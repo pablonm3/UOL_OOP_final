@@ -20,7 +20,7 @@ class PlaylistComponent  : public juce::Component,
                            public Button::Listener
 {
 public:
-    PlaylistComponent();
+    PlaylistComponent(Viewport* _viewport);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -55,5 +55,7 @@ private:
     TableListBox tableComponent;
     std::vector<URL> files;
     TextButton addButton{"Add song"};
+    
+    Viewport* viewport;
   
 };

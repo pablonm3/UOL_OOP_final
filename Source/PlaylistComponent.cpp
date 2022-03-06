@@ -14,7 +14,8 @@
 using namespace std;
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent()
+PlaylistComponent::PlaylistComponent(Viewport* _viewport)
+: viewport(_viewport)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -124,6 +125,7 @@ void PlaylistComponent::addSong ()
         DBG("files size: "+ to_string(files.size()));
         tableComponent.updateContent();
         tableComponent.repaint();
+        viewport->componentMovedOrResized(*this, false, true);
     }
 }
 
