@@ -29,6 +29,8 @@ PlaylistComponent::PlaylistComponent()
     tableComponent.getHeader().addColumn("Lenght", 2, 150);
     tableComponent.getHeader().addColumn("Actions", 3, 400);
     tableComponent.setModel(this);
+    
+    formatManager.registerBasicFormats();
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -106,8 +108,14 @@ void PlaylistComponent::paintCell (Graphics & g,
                     true);
     }
     if(columnId ==2){
+        DBG("rowNumber: "+ to_string(rowNumber));
         // render song lenght
-        g.drawText ("3 minutes", // the important bit
+        URL audioURL = files[rowNumber];
+        auto* reader = formatManager.createReaderFor(audioURL.createInputStream(false));
+        int durationInSecs = reader->lengthInSamples/reader->sampleRate;
+        int mins = durationInSecs / 60;
+        int secs = durationInSecs -(mins*60);
+        g.drawText (to_string(mins) + " Mins, " + to_string(secs)+ " Secs", // the important bit
                     2, 0,
                     width - 4, height,
                     Justification::centredLeft,

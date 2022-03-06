@@ -57,5 +57,6 @@ private:
     TextButton addButton{"Add song"};
     
     Viewport viewport;
+    AudioFormatManager formatManager;
   
 };
