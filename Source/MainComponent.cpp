@@ -28,11 +28,9 @@ MainComponent::MainComponent()
         // Specify the number of input and output channels that we want to open
         setAudioChannels (0, 2);
     }
-    viewportPlaylist.setViewedComponent(&playlistComponent, false);
-    
     addAndMakeVisible(deckGUI1); 
     addAndMakeVisible(deckGUI2);
-    addAndMakeVisible(viewportPlaylist);
+    addAndMakeVisible(playlistComponent);
     addAndMakeVisible(balanceController);
 
 }
@@ -91,11 +89,8 @@ void MainComponent::resized()
     deckGUI1.setBounds(0, 0, getWidth()/2, getHeight() / 2);
     deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, getHeight() / 2);
     balanceController.setBounds(0, getHeight()/2, getWidth(), getHeight()/10);
-   // playlistComponent.setBounds(0, getHeight() * 0.6, getWidth(), getHeight()/2);
-    viewportPlaylist.setBounds(0, getHeight() * 0.6, getWidth(), getHeight()/2);
-
-    playlistComponent.setSize(viewportPlaylist.getWidth() + 1, viewportPlaylist.getHeight() + 1); // with this size you will be able to scroll around with 1x1 pixel offset
-
+    playlistComponent.setBounds(0, getHeight() * 0.6, getWidth(), getHeight()/2);
+    
 }
 
 

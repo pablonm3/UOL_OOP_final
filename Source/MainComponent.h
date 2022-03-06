@@ -49,7 +49,6 @@ private:
     DeckGUI deckGUI2{&player2, &fxPlayer2, formatManager, thumbCache, {Colour(0xFF0A14C8)}, {Colour(0xFF0A14AA)}, {Colour(0xFF0A1496)}, false};
     MixerAudioSource mixerSource;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
-    Viewport viewportPlaylist;
-    PlaylistComponent playlistComponent{&viewportPlaylist};
+    PlaylistComponent playlistComponent;
     BalanceController balanceController{&player1, &fxPlayer1, &player2, &fxPlayer2};
 };

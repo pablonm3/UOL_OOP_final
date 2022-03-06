@@ -14,13 +14,14 @@
 using namespace std;
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent(Viewport* _viewport)
-: viewport(_viewport)
+PlaylistComponent::PlaylistComponent()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    addAndMakeVisible(tableComponent);
+    //addAndMakeVisible(tableComponent);
     addAndMakeVisible(addButton);
+    addAndMakeVisible(viewport);
+    viewport.setViewedComponent(&tableComponent, false);
     
     addButton.addListener(this);
     
@@ -81,8 +82,12 @@ void PlaylistComponent::resized()
     // components that your component contains..
     int tableSize = getHeight() * 0.7;
     int rowH = 20;
-    tableComponent.setBounds(0, 0, getWidth(), getHeight());
+    //tableComponent.setBounds(0, 0, getWidth(), getHeight());
     addButton.setBounds(0, tableSize, getWidth(), rowH);
+    
+    viewport.setBounds(0, 0, getWidth(), tableSize);
+
+    tableComponent.setSize(viewport.getWidth(), viewport.getHeight()+1); // with this size you will be able to scroll around with 1x1 pixel offset
 }
 
 void PlaylistComponent::paintCell (Graphics & g,
@@ -125,7 +130,7 @@ void PlaylistComponent::addSong ()
         DBG("files size: "+ to_string(files.size()));
         tableComponent.updateContent();
         tableComponent.repaint();
-        viewport->componentMovedOrResized(*this, false, true);
+        viewport.componentMovedOrResized(*this, false, true);
     }
 }
 
