@@ -21,6 +21,16 @@ PlaylistComponent::PlaylistComponent()
     //addAndMakeVisible(tableComponent);
     addAndMakeVisible(addButton);
     addAndMakeVisible(viewport);
+    addAndMakeVisible(searchLabel);
+    searchLabel.setEditable(true);
+    searchLabel.onTextChange = [this] {
+        searchQuery = searchLabel.getText().toLowerCase();
+        DBG("searchQuery: " + searchQuery);
+        refresh();
+    };
+
+    
+
     viewport.setViewedComponent(&tableComponent, false);
     
     addButton.addListener(this);
@@ -39,7 +49,9 @@ PlaylistComponent::~PlaylistComponent()
 
 int PlaylistComponent::getNumRows ()
 {
-    return files.size();
+    DBG("getNumRows - filesFiltered size: "+ to_string(filesFiltered.size()));
+    return filesFiltered.size();
+    
 }
 
 void PlaylistComponent::paintRowBackground (Graphics & g,
@@ -85,8 +97,8 @@ void PlaylistComponent::resized()
     int tableSize = getHeight() * 0.7;
     int rowH = 20;
     //tableComponent.setBounds(0, 0, getWidth(), getHeight());
-    addButton.setBounds(0, tableSize, getWidth(), rowH);
-    
+    searchLabel.setBounds(0, tableSize, (getWidth()/2) - 3, rowH);
+    addButton.setBounds(getWidth()/2, tableSize, getWidth()/2, rowH);
     viewport.setBounds(0, 0, getWidth(), tableSize);
 
     tableComponent.setSize(viewport.getWidth(), viewport.getHeight()+1); // with this size you will be able to scroll around with 1x1 pixel offset
@@ -101,17 +113,16 @@ void PlaylistComponent::paintCell (Graphics & g,
 {
     if(columnId ==1){
         // render filename
-        g.drawText (files[rowNumber].getFileName(), // the important bit
+        g.drawText (filesFiltered[rowNumber]->getFileName(), // the important bit
                     2, 0,
                     width - 4, height,
                     Justification::centredLeft,
                     true);
     }
     if(columnId ==2){
-        DBG("rowNumber: "+ to_string(rowNumber));
         // render song lenght
-        URL audioURL = files[rowNumber];
-        auto* reader = formatManager.createReaderFor(audioURL.createInputStream(false));
+        URL * audioURL = filesFiltered[rowNumber];
+        auto* reader = formatManager.createReaderFor(audioURL->createInputStream(false));
         int durationInSecs = reader->lengthInSamples/reader->sampleRate;
         int mins = durationInSecs / 60;
         int secs = durationInSecs -(mins*60);
@@ -136,13 +147,28 @@ void PlaylistComponent::addSong ()
         URL url = URL{chooser.getResult()};
         files.push_back(url);
         DBG("files size: "+ to_string(files.size()));
-        tableComponent.updateContent();
-        tableComponent.repaint();
-        viewport.componentMovedOrResized(*this, false, true);
+        refresh();
     }
 }
 
 
+void PlaylistComponent::refresh(){
+    filesFiltered.clear();
+
+
+    for(URL &f: files) {
+        std::string filename = f.getFileName().toLowerCase().toStdString();
+        int match = filename.rfind(searchQuery.toLowerCase().toStdString());
+        if(searchQuery=="" or match != string::npos ){
+            filesFiltered.push_back(&f);
+        }
+    }
+
+
+    tableComponent.updateContent();
+    tableComponent.repaint();
+    viewport.componentMovedOrResized(*this, false, true);
+}
 
 Component* PlaylistComponent::refreshComponentForCell (
     int rowNumber,
@@ -168,7 +194,6 @@ void PlaylistComponent::buttonClicked(Button* button)
 {
     if (button == &addButton)
     {
-        std::cout << "Play button was clicked " << std::endl;
         addSong();
     }
 }

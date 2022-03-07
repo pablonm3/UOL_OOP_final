@@ -54,9 +54,15 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
     TableListBox tableComponent;
     std::vector<URL> files;
+    std::vector<URL *> filesFiltered;
     TextButton addButton{"Add song"};
     
     Viewport viewport;
     AudioFormatManager formatManager;
+    
+    Label searchLabel;
+    String searchQuery="";
+    
+    void refresh();
   
 };
