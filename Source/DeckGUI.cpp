@@ -187,12 +187,19 @@ void DeckGUI::buttonClicked(Button* button)
         if (chooser.browseForFileToOpen())
         {
             URL url = URL{chooser.getResult()};
-            filenameScreen.setFilename(url.getFileName());
-            player->loadURL(url);
-            // and now the waveformDisplay as well
-            waveformDisplay.loadURL(url);
+            loadURL(url);
         }
     }
+}
+
+
+void DeckGUI::loadURL(URL url){
+    cout << "url.getFileName(): " << url.getFileName() << endl;
+    player->loadURL(url);
+    // and now the waveformDisplay as well
+    waveformDisplay.loadURL(url);
+    filenameScreen.setFilename(url.getFileName());
+    filenameScreen.repaint();
 }
 
 void DeckGUI::sliderValueChanged (Slider *slider)
@@ -227,10 +234,7 @@ void DeckGUI::filesDropped (const StringArray &files, int x, int y)
   if (files.size() == 1)
   {
       URL url = URL{File{files[0]}};
-      filenameScreen.setFilename(url.getFileName());
-      player->loadURL(url);
-      waveformDisplay.loadURL(url);
-
+      loadURL(url);
   }
 }
 

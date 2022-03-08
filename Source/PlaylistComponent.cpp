@@ -11,10 +11,14 @@
 #include <JuceHeader.h>
 #include "PlaylistComponent.h"
 #include <string>
+#include <string.h>
+#include <stdio.h>
+
 using namespace std;
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent()
+PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
+: deckGUI1(_deckGUI1), deckGUI2(_deckGUI2)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -37,7 +41,8 @@ PlaylistComponent::PlaylistComponent()
     
     tableComponent.getHeader().addColumn("Track title", 1, 250);
     tableComponent.getHeader().addColumn("Lenght", 2, 150);
-    tableComponent.getHeader().addColumn("Actions", 3, 400);
+    tableComponent.getHeader().addColumn("", 3, 200);
+    tableComponent.getHeader().addColumn("", 4, 200);
     tableComponent.setModel(this);
     
     formatManager.registerBasicFormats();
@@ -49,9 +54,7 @@ PlaylistComponent::~PlaylistComponent()
 
 int PlaylistComponent::getNumRows ()
 {
-    DBG("getNumRows - filesFiltered size: "+ to_string(filesFiltered.size()));
-    return filesFiltered.size();
-    
+    return fileIndices.size();
 }
 
 void PlaylistComponent::paintRowBackground (Graphics & g,
@@ -111,9 +114,10 @@ void PlaylistComponent::paintCell (Graphics & g,
     int height,
     bool rowIsSelected)
 {
+    int index = fileIndices[rowNumber];
     if(columnId ==1){
         // render filename
-        g.drawText (filesFiltered[rowNumber]->getFileName(), // the important bit
+        g.drawText (files[index].getFileName(), // the important bit
                     2, 0,
                     width - 4, height,
                     Justification::centredLeft,
@@ -121,8 +125,8 @@ void PlaylistComponent::paintCell (Graphics & g,
     }
     if(columnId ==2){
         // render song lenght
-        URL * audioURL = filesFiltered[rowNumber];
-        auto* reader = formatManager.createReaderFor(audioURL->createInputStream(false));
+        URL audioURL = files[index];
+        auto* reader = formatManager.createReaderFor(audioURL.createInputStream(false));
         int durationInSecs = reader->lengthInSamples/reader->sampleRate;
         int mins = durationInSecs / 60;
         int secs = durationInSecs -(mins*60);
@@ -153,15 +157,16 @@ void PlaylistComponent::addSong ()
 
 
 void PlaylistComponent::refresh(){
-    filesFiltered.clear();
+    fileIndices.clear();
 
-
+    int index =0;
     for(URL &f: files) {
         std::string filename = f.getFileName().toLowerCase().toStdString();
         int match = filename.rfind(searchQuery.toLowerCase().toStdString());
         if(searchQuery=="" or match != string::npos ){
-            filesFiltered.push_back(&f);
+            fileIndices.push_back(index);
         }
+        index +=1;
     }
 
 
@@ -183,7 +188,18 @@ Component* PlaylistComponent::refreshComponentForCell (
             TextButton* btn = new TextButton("Load deck 1");
             btn->addListener(this);
             String id{std::to_string(rowNumber)};
-            btn->setComponentID(id);
+            btn->setComponentID(id+"_1");
+            existingComponentToUpdate = btn;
+        }
+    }
+    if (columnId == 4)
+    {
+        if (existingComponentToUpdate == nullptr)
+        {
+            TextButton* btn = new TextButton("Load deck 2");
+            btn->addListener(this);
+            String id{std::to_string(rowNumber)};
+            btn->setComponentID(id+"_2");
             existingComponentToUpdate = btn;
         }
     }
@@ -195,5 +211,31 @@ void PlaylistComponent::buttonClicked(Button* button)
     if (button == &addButton)
     {
         addSong();
+    }
+    else{
+        // component id tells the row and wether to load song in deck 1 or 2
+        string id = button->getComponentID().toStdString();
+        char * char_id = new char [id.length()+1];
+        strcpy (char_id, id.c_str());
+        DBG("id: "+ id);
+        char string[50] = "Hello! We are learning about strtok";
+
+        String row{strtok(char_id, "_")};
+        cout << "row: "<< row << endl;
+        int row_num = stoi(row.toStdString());
+        cout << "row_num: "<< row_num << endl;
+        String deck_no{strtok (NULL, "-")};
+        cout << "deck_no: "<< deck_no;
+        int index = fileIndices[row_num];
+        URL fileUrl = files[index];
+ 
+        if(deck_no == "1"){
+            cout << "loading song in deck1 "<< endl;
+            deckGUI1->loadURL(fileUrl);
+        }
+        else if(deck_no == "2"){
+            cout << "loading song in deck2 "<< endl;
+            deckGUI2->loadURL(fileUrl);
+        }
     }
 }

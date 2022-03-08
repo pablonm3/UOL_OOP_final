@@ -51,7 +51,7 @@ public:
     bool isInterestedInFileDrag (const StringArray &files) override;
     void filesDropped (const StringArray &files, int x, int y) override;
     void timerCallback() override;
-
+    void loadURL(URL url);
 
 
 private:

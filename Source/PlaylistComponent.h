@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
+#include "DeckGUI.h"
 //==============================================================================
 /*
 */
@@ -20,7 +20,7 @@ class PlaylistComponent  : public juce::Component,
                            public Button::Listener
 {
 public:
-    PlaylistComponent();
+    PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -54,7 +54,7 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
     TableListBox tableComponent;
     std::vector<URL> files;
-    std::vector<URL *> filesFiltered;
+    std::vector<int> fileIndices;
     TextButton addButton{"Add song"};
     
     Viewport viewport;
@@ -62,6 +62,9 @@ private:
     
     Label searchLabel;
     String searchQuery="";
+    DeckGUI* deckGUI1;
+    DeckGUI* deckGUI2;
+
     
     void refresh();
   
