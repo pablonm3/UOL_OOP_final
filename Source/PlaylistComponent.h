@@ -48,6 +48,8 @@ public:
     
     void buttonClicked(Button* button) override;
     
+    void saveLibraryToTile();
+    
     void addSong();
 
 private:

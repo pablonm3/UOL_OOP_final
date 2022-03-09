@@ -13,6 +13,8 @@
 #include <string>
 #include <string.h>
 #include <stdio.h>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -153,8 +155,28 @@ void PlaylistComponent::addSong ()
         DBG("files size: "+ to_string(files.size()));
         refresh();
     }
+    saveLibraryToTile();
 }
 
+void PlaylistComponent::saveLibraryToTile(){
+    
+//      ofstream myfile;
+//      myfile.open ("library.txt");
+//      myfile << "Writing this to a file.\n";
+//      myfile.close();
+    XmlElement newElement{"filenames"};
+    //myParentElement->addChildElement (newElement);
+
+
+    for(URL &f: files) {
+        String filename = f.getFileName().toLowerCase();
+        XmlElement* child = new XmlElement(filename);
+        newElement.addChildElement(child);
+    }
+    File file{"/Users/pablo/Desktop/playlist.xml"};
+    newElement.writeTo(file, XmlElement::TextFormat());
+    
+}
 
 void PlaylistComponent::refresh(){
     fileIndices.clear();
