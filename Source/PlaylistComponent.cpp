@@ -164,13 +164,13 @@ void PlaylistComponent::saveLibraryToTile(){
 //      myfile.open ("library.txt");
 //      myfile << "Writing this to a file.\n";
 //      myfile.close();
-    XmlElement newElement{"filenames"};
+    XmlElement newElement{"paths"};
     //myParentElement->addChildElement (newElement);
 
-
-    for(URL &f: files) {
-        String filename = f.getFileName().toLowerCase();
-        XmlElement* child = new XmlElement(filename);
+    for(URL &u: files) {
+        String filename = u.getLocalFile().getFullPathName().toLowerCase();
+        XmlElement* child = new XmlElement("path");
+        child->setAttribute("path", filename);
         newElement.addChildElement(child);
     }
     File file{"/Users/pablo/Desktop/playlist.xml"};
