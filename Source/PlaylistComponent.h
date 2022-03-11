@@ -66,7 +66,7 @@ private:
     String searchQuery="";
     DeckGUI* deckGUI1;
     DeckGUI* deckGUI2;
-
+    String state_file_path;
     
     void refresh();
     void restoreLibrary();

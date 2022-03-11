@@ -48,6 +48,9 @@ PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
     tableComponent.setModel(this);
     
     formatManager.registerBasicFormats();
+    state_file_path = File::getSpecialLocation(File::SpecialLocationType
+::userApplicationDataDirectory).getFullPathName() + "/UOL_ottodecks_playlist.xml";
+    DBG("state_file_path: "+ state_file_path);
     restoreLibrary();
 }
 
@@ -164,13 +167,13 @@ void PlaylistComponent::saveLibraryToTile(){
         child->setAttribute("path", filename);
         newElement.addChildElement(child);
     }
-    File file{"/Users/pablo/Desktop/playlist.xml"};
+    File file{state_file_path};
     newElement.writeTo(file, XmlElement::TextFormat());
     
 }
 
 void PlaylistComponent::restoreLibrary(){
-    File file{"/Users/pablo/Desktop/playlist.xml"};
+    File file{state_file_path};
     if(file.exists() == false){
         return;
     }
