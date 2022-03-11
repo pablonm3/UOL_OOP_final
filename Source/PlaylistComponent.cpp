@@ -48,6 +48,7 @@ PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
     tableComponent.setModel(this);
     
     formatManager.registerBasicFormats();
+    restoreLibrary();
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -160,12 +161,7 @@ void PlaylistComponent::addSong ()
 
 void PlaylistComponent::saveLibraryToTile(){
     
-//      ofstream myfile;
-//      myfile.open ("library.txt");
-//      myfile << "Writing this to a file.\n";
-//      myfile.close();
     XmlElement newElement{"paths"};
-    //myParentElement->addChildElement (newElement);
 
     for(URL &u: files) {
         String filename = u.getLocalFile().getFullPathName().toLowerCase();
@@ -177,6 +173,26 @@ void PlaylistComponent::saveLibraryToTile(){
     newElement.writeTo(file, XmlElement::TextFormat());
     
 }
+
+void PlaylistComponent::restoreLibrary(){
+    files.clear();
+    File file{"/Users/pablo/Desktop/playlist.xml"};
+    XmlDocument xmlDocument{file};
+
+    std::unique_ptr<XmlElement> xmlElement = xmlDocument.getDocumentElement();
+    XmlElement* cur_element = xmlElement->getFirstChildElement();
+    while (cur_element != nullptr)
+    {
+        String file_path = cur_element->getStringAttribute("path");
+        DBG("READ file_path: "+ file_path);
+        File f{file_path};
+        URL url = URL{f};
+        files.push_back(url);
+        cur_element = cur_element->getNextElement();
+    }
+    refresh();
+}
+
 
 void PlaylistComponent::refresh(){
     fileIndices.clear();

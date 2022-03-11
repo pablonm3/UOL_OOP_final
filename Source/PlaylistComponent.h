@@ -69,5 +69,6 @@ private:
 
     
     void refresh();
+    void restoreLibrary();
   
 };
