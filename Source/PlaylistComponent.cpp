@@ -16,6 +16,7 @@
 #include <iostream>
 #include <fstream>
 
+
 using namespace std;
 
 //==============================================================================
@@ -24,7 +25,6 @@ PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    //addAndMakeVisible(tableComponent);
     addAndMakeVisible(addButton);
     addAndMakeVisible(viewport);
     addAndMakeVisible(searchLabel);
@@ -53,6 +53,7 @@ PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
 
 PlaylistComponent::~PlaylistComponent()
 {
+    files.clear();
 }
 
 int PlaylistComponent::getNumRows ()
@@ -66,14 +67,7 @@ void PlaylistComponent::paintRowBackground (Graphics & g,
     int height,
     bool rowIsSelected)
 {
-    // just highlight selected rows
-    //if (rowIsSelected)
-   // {
-     //   g.fillAll(Colours::orange);
-    //}
-   // else{
     g.fillAll(Colours::darkgrey);
-    //}
 }
 
 void PlaylistComponent::paint (juce::Graphics& g)
@@ -138,6 +132,7 @@ void PlaylistComponent::paintCell (Graphics & g,
                     width - 4, height,
                     Justification::centredLeft,
                     true);
+        delete reader;
     }
  
 }
@@ -175,8 +170,11 @@ void PlaylistComponent::saveLibraryToTile(){
 }
 
 void PlaylistComponent::restoreLibrary(){
-    files.clear();
     File file{"/Users/pablo/Desktop/playlist.xml"};
+    if(file.exists() == false){
+        return;
+    }
+    files.clear();
     XmlDocument xmlDocument{file};
 
     std::unique_ptr<XmlElement> xmlElement = xmlDocument.getDocumentElement();
@@ -275,5 +273,6 @@ void PlaylistComponent::buttonClicked(Button* button)
             cout << "loading song in deck2 "<< endl;
             deckGUI2->loadURL(fileUrl);
         }
+        delete char_id;
     }
 }
