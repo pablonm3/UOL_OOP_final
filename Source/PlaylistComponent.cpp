@@ -26,8 +26,8 @@ PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     addAndMakeVisible(addButton);
-    addAndMakeVisible(viewport);
     addAndMakeVisible(searchLabel);
+    addAndMakeVisible(tableComponent);
     searchLabel.setEditable(true);
     searchLabel.onTextChange = [this] {
         searchQuery = searchLabel.getText().toLowerCase();
@@ -36,8 +36,6 @@ PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
     };
 
     
-
-    viewport.setViewedComponent(&tableComponent, false);
     
     addButton.addListener(this);
     
@@ -46,6 +44,7 @@ PlaylistComponent::PlaylistComponent(DeckGUI* _deckGUI1, DeckGUI* _deckGUI2)
     tableComponent.getHeader().addColumn("", 3, 200);
     tableComponent.getHeader().addColumn("", 4, 200);
     tableComponent.setModel(this);
+    
     
     formatManager.registerBasicFormats();
     state_file_path = File::getSpecialLocation(File::SpecialLocationType
@@ -91,6 +90,8 @@ void PlaylistComponent::paint (juce::Graphics& g)
     g.setFont (14.0f);
     g.drawText ("PlaylistComponent", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
+    tableComponent.getViewport()->setScrollBarsShown(true, false, true);
+
 }
 
 void PlaylistComponent::resized()
@@ -99,12 +100,10 @@ void PlaylistComponent::resized()
     // components that your component contains..
     int tableSize = getHeight() * 0.7;
     int rowH = 20;
-    //tableComponent.setBounds(0, 0, getWidth(), getHeight());
+    tableComponent.setBounds(0, 0, getWidth(), tableSize);
     searchLabel.setBounds(0, tableSize, (getWidth()/2) - 3, rowH);
     addButton.setBounds(getWidth()/2, tableSize, getWidth()/2, rowH);
-    viewport.setBounds(0, 0, getWidth(), tableSize);
 
-    tableComponent.setSize(viewport.getWidth(), viewport.getHeight()+1); // with this size you will be able to scroll around with 1x1 pixel offset
 }
 
 void PlaylistComponent::paintCell (Graphics & g,
@@ -211,7 +210,6 @@ void PlaylistComponent::refresh(){
 
     tableComponent.updateContent();
     tableComponent.repaint();
-    viewport.componentMovedOrResized(*this, false, true);
 }
 
 Component* PlaylistComponent::refreshComponentForCell (

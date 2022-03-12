@@ -53,8 +53,6 @@ void BalanceController::sliderValueChanged (Slider *slider)
     player2->setGain(p2_gain);
     fxPlayer1->setGain(p1_gain);
     fxPlayer2->setGain(p2_gain);
-    
-    
 }
 
 void BalanceController::paint (juce::Graphics& g)

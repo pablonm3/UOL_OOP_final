@@ -58,8 +58,6 @@ private:
     std::vector<URL> files;
     std::vector<int> fileIndices;
     TextButton addButton{"Add song"};
-    
-    Viewport viewport;
     AudioFormatManager formatManager;
     
     Label searchLabel;
