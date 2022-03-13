@@ -136,7 +136,6 @@ void PlaylistComponent::paintCell (Graphics & g,
                     true);
         delete reader;
     }
- 
 }
 
 void PlaylistComponent::cellClicked (int rowNumber, int columnId, const MouseEvent &)
@@ -207,7 +206,6 @@ void PlaylistComponent::refresh(){
         index +=1;
     }
 
-
     tableComponent.updateContent();
     tableComponent.repaint();
 }
@@ -255,7 +253,6 @@ void PlaylistComponent::buttonClicked(Button* button)
         char * char_id = new char [id.length()+1];
         strcpy (char_id, id.c_str());
         DBG("id: "+ id);
-        char string[50] = "Hello! We are learning about strtok";
 
         String row{strtok(char_id, "_")};
         cout << "row: "<< row << endl;
@@ -274,6 +271,6 @@ void PlaylistComponent::buttonClicked(Button* button)
             cout << "loading song in deck2 "<< endl;
             deckGUI2->loadURL(fileUrl);
         }
-        delete char_id;
+        delete[] char_id;
     }
 }

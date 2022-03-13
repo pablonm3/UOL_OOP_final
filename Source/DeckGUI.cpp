@@ -133,7 +133,6 @@ void DeckGUI::resized()
         pauseButton.setBounds(col, rowH*0.1, getWidth()/8, rowH*0.8);
         loadButton.setBounds(col*2, rowH*0.1, getWidth()/8, rowH*0.8);
         
-        
         filenameScreen.setBounds(col*3+10, rowH*0.1, getWidth()/2, rowH*0.8);
         
         // start fx buttons
@@ -157,8 +156,6 @@ void DeckGUI::resized()
         fxButtons.setBounds(col, rowH*2, getWidth()-col, rowH*0.8);
         
         // end fx buttons
-        
-        
         speedSlider.setBounds(col*2, rowH * 3, getWidth()-col*2, rowH);
         posSlider.setBounds(col*2, rowH * 4, getWidth()-col*2, rowH);
     }
